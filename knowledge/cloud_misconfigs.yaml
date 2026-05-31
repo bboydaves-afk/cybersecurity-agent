@@ -1,0 +1,127 @@
+# Common Cloud Misconfigurations
+aws:
+  - id: "AWS-S3-001"
+    name: "Public S3 Bucket"
+    severity: critical
+    description: "S3 bucket allows public read or write access"
+    check: "Review bucket ACL and bucket policy for public access"
+    remediation: "Enable S3 Block Public Access at account level. Review and restrict bucket policies."
+    service: "S3"
+  - id: "AWS-IAM-001"
+    name: "Overly Permissive IAM Policy"
+    severity: high
+    description: "IAM policy grants wildcard (*) permissions"
+    check: "Audit IAM policies for Action: * or Resource: *"
+    remediation: "Apply least-privilege principle. Use AWS IAM Access Analyzer."
+  - id: "AWS-IAM-002"
+    name: "Root Account Usage"
+    severity: critical
+    description: "AWS root account used for daily operations"
+    check: "Check CloudTrail for root account API calls"
+    remediation: "Create IAM users for daily work. Enable MFA on root account."
+  - id: "AWS-IAM-003"
+    name: "No MFA on IAM Users"
+    severity: high
+    description: "IAM users without multi-factor authentication"
+    check: "List IAM users and check MFA device association"
+    remediation: "Enforce MFA for all IAM users, especially those with console access."
+  - id: "AWS-EC2-001"
+    name: "Security Group Allows 0.0.0.0/0"
+    severity: high
+    description: "Security group allows unrestricted inbound access"
+    check: "Review security groups for 0.0.0.0/0 or ::/0 inbound rules"
+    remediation: "Restrict security group rules to specific IPs and ports."
+  - id: "AWS-EC2-002"
+    name: "Unencrypted EBS Volumes"
+    severity: medium
+    description: "EBS volumes without encryption at rest"
+    check: "List EBS volumes and check encryption status"
+    remediation: "Enable default EBS encryption. Encrypt existing volumes."
+  - id: "AWS-RDS-001"
+    name: "Public RDS Instance"
+    severity: critical
+    description: "RDS database instance publicly accessible"
+    check: "Check RDS instances for PubliclyAccessible flag"
+    remediation: "Disable public accessibility. Use VPC and security groups."
+  - id: "AWS-CT-001"
+    name: "CloudTrail Disabled"
+    severity: critical
+    description: "AWS CloudTrail not enabled for all regions"
+    check: "Verify CloudTrail is enabled in all regions"
+    remediation: "Enable CloudTrail with multi-region logging."
+  - id: "AWS-KMS-001"
+    name: "Access Key Not Rotated"
+    severity: medium
+    description: "IAM access keys not rotated within 90 days"
+    check: "Check access key age for all IAM users"
+    remediation: "Rotate access keys every 90 days. Use IAM roles instead."
+
+azure:
+  - id: "AZ-STOR-001"
+    name: "Public Blob Container"
+    severity: critical
+    description: "Azure Blob container allows anonymous access"
+    check: "Check container public access level"
+    remediation: "Set container access to Private. Use SAS tokens for access."
+  - id: "AZ-NSG-001"
+    name: "NSG Allows Any Inbound"
+    severity: high
+    description: "Network Security Group allows unrestricted inbound traffic"
+    check: "Review NSG rules for Any source with Allow action"
+    remediation: "Restrict NSG rules to specific sources and ports."
+  - id: "AZ-IAM-001"
+    name: "Excessive RBAC Assignments"
+    severity: high
+    description: "Users assigned Owner or Contributor at subscription level"
+    check: "Audit role assignments at subscription scope"
+    remediation: "Use least-privilege roles. Assign at resource group level."
+  - id: "AZ-SQL-001"
+    name: "Azure SQL Firewall Allows All Azure"
+    severity: medium
+    description: "Azure SQL firewall rule allows all Azure services"
+    check: "Check for Allow Azure Services firewall rule"
+    remediation: "Remove the allow-all rule. Use specific VNet rules."
+  - id: "AZ-KV-001"
+    name: "Key Vault Soft Delete Disabled"
+    severity: medium
+    description: "Azure Key Vault without soft-delete protection"
+    check: "Verify soft-delete and purge-protection are enabled"
+    remediation: "Enable soft-delete and purge protection on all Key Vaults."
+  - id: "AZ-LOG-001"
+    name: "Diagnostic Logging Disabled"
+    severity: high
+    description: "Azure resources without diagnostic logging"
+    check: "Check diagnostic settings on critical resources"
+    remediation: "Enable diagnostic logging to Log Analytics workspace."
+
+gcp:
+  - id: "GCP-GCS-001"
+    name: "Public GCS Bucket"
+    severity: critical
+    description: "Cloud Storage bucket accessible to allUsers or allAuthenticatedUsers"
+    check: "Review bucket IAM bindings for public access"
+    remediation: "Remove allUsers/allAuthenticatedUsers bindings. Use Uniform bucket-level access."
+  - id: "GCP-IAM-001"
+    name: "Primitive Roles Used"
+    severity: high
+    description: "Using Owner/Editor/Viewer primitive roles instead of predefined roles"
+    check: "Audit IAM bindings for roles/owner, roles/editor"
+    remediation: "Replace primitive roles with predefined or custom roles."
+  - id: "GCP-FW-001"
+    name: "Firewall Allows All Ingress"
+    severity: high
+    description: "VPC firewall rule allows 0.0.0.0/0 ingress"
+    check: "Review firewall rules for overly permissive source ranges"
+    remediation: "Restrict source ranges. Use service accounts for internal access."
+  - id: "GCP-LOG-001"
+    name: "Audit Logging Disabled"
+    severity: high
+    description: "Cloud Audit Logging not enabled for all services"
+    check: "Verify audit log configuration in IAM & Admin"
+    remediation: "Enable Data Access audit logs for all services."
+  - id: "GCP-SQL-001"
+    name: "Cloud SQL Public IP"
+    severity: critical
+    description: "Cloud SQL instance accessible via public IP"
+    check: "Check Cloud SQL instances for public IP assignment"
+    remediation: "Use private IP only. Use Cloud SQL Proxy for connections."

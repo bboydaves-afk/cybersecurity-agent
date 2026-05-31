@@ -1,0 +1,99 @@
+# Cloud Security Audit Playbook
+name: Cloud Security Audit
+description: Multi-cloud security configuration audit
+version: "1.0"
+author: CyberSecurity Agent
+trigger: manual
+
+phases:
+  - name: AWS Audit
+    description: Amazon Web Services security audit
+    condition: "provider == 'aws' or provider == 'all'"
+    steps:
+      - action: audit_aws
+        description: Full AWS security configuration audit
+      - action: check_iam_permissions
+        description: IAM policy and permission review
+        params:
+          provider: aws
+      - action: check_storage_exposure
+        description: S3 bucket exposure check
+        params:
+          provider: aws
+      - action: check_public_resources
+        description: Check for publicly exposed resources
+        params:
+          provider: aws
+      - action: check_encryption
+        description: Encryption at rest and in transit
+        params:
+          provider: aws
+      - action: check_logging
+        description: CloudTrail and logging configuration
+        params:
+          provider: aws
+      - action: check_mfa
+        description: MFA enforcement check
+        params:
+          provider: aws
+      - action: check_key_rotation
+        description: Access key rotation check
+        params:
+          provider: aws
+
+  - name: Azure Audit
+    description: Microsoft Azure security audit
+    condition: "provider == 'azure' or provider == 'all'"
+    steps:
+      - action: audit_azure
+        description: Full Azure security configuration audit
+      - action: check_iam_permissions
+        description: Azure RBAC review
+        params:
+          provider: azure
+      - action: check_storage_exposure
+        description: Storage account exposure check
+        params:
+          provider: azure
+      - action: check_network_exposure
+        description: NSG and network security check
+        params:
+          provider: azure
+
+  - name: GCP Audit
+    description: Google Cloud Platform security audit
+    condition: "provider == 'gcp' or provider == 'all'"
+    steps:
+      - action: audit_gcp
+        description: Full GCP security configuration audit
+      - action: check_iam_permissions
+        description: GCP IAM review
+        params:
+          provider: gcp
+      - action: check_storage_exposure
+        description: GCS bucket exposure check
+        params:
+          provider: gcp
+
+  - name: Cross-Cloud Analysis
+    description: Cross-cloud security posture analysis
+    steps:
+      - action: get_cloud_summary
+        description: Aggregate findings across all providers
+      - action: map_findings_to_framework
+        description: Map to CIS cloud benchmarks
+        params:
+          project_id: "{{ project_id }}"
+          framework: cis
+
+  - name: Reporting
+    description: Generate cloud audit report
+    steps:
+      - action: generate_compliance_report
+        params:
+          project_id: "{{ project_id }}"
+      - action: generate_report
+        params:
+          project_id: "{{ project_id }}"
+          format: html
+          title: "Cloud Security Audit Report — {{ provider }}"

@@ -1,0 +1,185 @@
+# Common Ports, Services, and Associated Vulnerabilities
+ports:
+  20:
+    service: "FTP Data"
+    protocol: tcp
+    description: "FTP data transfer"
+    common_vulns: ["cleartext transfer", "bounce attack"]
+  21:
+    service: "FTP"
+    protocol: tcp
+    description: "File Transfer Protocol control"
+    common_vulns: ["anonymous login", "brute force", "FTP bounce", "cleartext credentials"]
+    default_creds: ["ftp:ftp", "anonymous:anonymous", "anonymous:"]
+  22:
+    service: "SSH"
+    protocol: tcp
+    description: "Secure Shell"
+    common_vulns: ["brute force", "weak ciphers", "key reuse", "CVE-based exploits"]
+    nmap_scripts: ["ssh-brute", "ssh-auth-methods", "ssh2-enum-algos"]
+  23:
+    service: "Telnet"
+    protocol: tcp
+    description: "Unencrypted remote access"
+    common_vulns: ["cleartext credentials", "brute force", "no encryption"]
+    default_creds: ["admin:admin", "root:root", "cisco:cisco"]
+  25:
+    service: "SMTP"
+    protocol: tcp
+    description: "Simple Mail Transfer Protocol"
+    common_vulns: ["open relay", "user enumeration (VRFY/EXPN)", "header injection"]
+    nmap_scripts: ["smtp-enum-users", "smtp-open-relay", "smtp-commands"]
+  53:
+    service: "DNS"
+    protocol: "tcp/udp"
+    description: "Domain Name System"
+    common_vulns: ["zone transfer", "cache poisoning", "DNS amplification", "subdomain enumeration"]
+    nmap_scripts: ["dns-zone-transfer", "dns-brute", "dns-recursion"]
+  80:
+    service: "HTTP"
+    protocol: tcp
+    description: "Hypertext Transfer Protocol"
+    common_vulns: ["all OWASP Top 10", "directory traversal", "server misconfiguration"]
+    nmap_scripts: ["http-enum", "http-headers", "http-methods", "http-title"]
+  110:
+    service: "POP3"
+    protocol: tcp
+    description: "Post Office Protocol v3"
+    common_vulns: ["cleartext credentials", "brute force"]
+  111:
+    service: "RPCbind"
+    protocol: tcp
+    description: "Remote Procedure Call"
+    common_vulns: ["NFS enumeration", "service enumeration"]
+    nmap_scripts: ["rpcinfo", "nfs-ls", "nfs-showmount"]
+  135:
+    service: "MSRPC"
+    protocol: tcp
+    description: "Microsoft Remote Procedure Call"
+    common_vulns: ["endpoint enumeration", "DCOM exploitation"]
+  139:
+    service: "NetBIOS"
+    protocol: tcp
+    description: "NetBIOS Session Service"
+    common_vulns: ["null session", "share enumeration", "user enumeration"]
+  143:
+    service: "IMAP"
+    protocol: tcp
+    description: "Internet Message Access Protocol"
+    common_vulns: ["cleartext credentials", "brute force"]
+  161:
+    service: "SNMP"
+    protocol: udp
+    description: "Simple Network Management Protocol"
+    common_vulns: ["default community strings", "information disclosure", "SNMPv1/v2 cleartext"]
+    default_creds: ["public", "private", "community"]
+    nmap_scripts: ["snmp-brute", "snmp-info", "snmp-interfaces"]
+  389:
+    service: "LDAP"
+    protocol: tcp
+    description: "Lightweight Directory Access Protocol"
+    common_vulns: ["anonymous bind", "LDAP injection", "information disclosure"]
+    nmap_scripts: ["ldap-rootdse", "ldap-search", "ldap-brute"]
+  443:
+    service: "HTTPS"
+    protocol: tcp
+    description: "HTTP over TLS/SSL"
+    common_vulns: ["weak ciphers", "expired certificates", "all OWASP Top 10"]
+    nmap_scripts: ["ssl-enum-ciphers", "ssl-cert", "ssl-heartbleed"]
+  445:
+    service: "SMB"
+    protocol: tcp
+    description: "Server Message Block"
+    common_vulns: ["EternalBlue (MS17-010)", "null session", "share enumeration", "brute force"]
+    nmap_scripts: ["smb-enum-shares", "smb-enum-users", "smb-vuln-ms17-010", "smb-os-discovery"]
+    default_creds: ["guest:", "administrator:password"]
+  993:
+    service: "IMAPS"
+    protocol: tcp
+    description: "IMAP over SSL"
+    common_vulns: ["weak SSL/TLS"]
+  995:
+    service: "POP3S"
+    protocol: tcp
+    description: "POP3 over SSL"
+    common_vulns: ["weak SSL/TLS"]
+  1433:
+    service: "MSSQL"
+    protocol: tcp
+    description: "Microsoft SQL Server"
+    common_vulns: ["brute force", "SQL injection", "xp_cmdshell", "default sa password"]
+    default_creds: ["sa:sa", "sa:password", "sa:Password1"]
+    nmap_scripts: ["ms-sql-info", "ms-sql-brute", "ms-sql-empty-password"]
+  1521:
+    service: "Oracle DB"
+    protocol: tcp
+    description: "Oracle Database"
+    common_vulns: ["TNS poisoning", "default credentials", "brute force"]
+    default_creds: ["system:manager", "sys:change_on_install", "scott:tiger"]
+  2049:
+    service: "NFS"
+    protocol: tcp
+    description: "Network File System"
+    common_vulns: ["no authentication", "root squashing bypass", "world-readable exports"]
+    nmap_scripts: ["nfs-ls", "nfs-showmount", "nfs-statfs"]
+  3306:
+    service: "MySQL"
+    protocol: tcp
+    description: "MySQL Database"
+    common_vulns: ["brute force", "remote root login", "SQL injection", "UDF exploitation"]
+    default_creds: ["root:", "root:root", "root:password", "root:mysql"]
+    nmap_scripts: ["mysql-info", "mysql-brute", "mysql-enum"]
+  3389:
+    service: "RDP"
+    protocol: tcp
+    description: "Remote Desktop Protocol"
+    common_vulns: ["BlueKeep (CVE-2019-0708)", "brute force", "NLA bypass", "credential theft"]
+    nmap_scripts: ["rdp-enum-encryption", "rdp-vuln-ms12-020"]
+  5432:
+    service: "PostgreSQL"
+    protocol: tcp
+    description: "PostgreSQL Database"
+    common_vulns: ["brute force", "trust authentication", "SQL injection"]
+    default_creds: ["postgres:postgres", "postgres:password"]
+  5900:
+    service: "VNC"
+    protocol: tcp
+    description: "Virtual Network Computing"
+    common_vulns: ["no authentication", "weak password", "unencrypted"]
+    nmap_scripts: ["vnc-brute", "vnc-info"]
+  5985:
+    service: "WinRM HTTP"
+    protocol: tcp
+    description: "Windows Remote Management"
+    common_vulns: ["brute force", "credential relay"]
+  5986:
+    service: "WinRM HTTPS"
+    protocol: tcp
+    description: "Windows Remote Management (SSL)"
+    common_vulns: ["brute force", "credential relay"]
+  6379:
+    service: "Redis"
+    protocol: tcp
+    description: "Redis key-value store"
+    common_vulns: ["no authentication", "command injection", "RCE via SLAVEOF", "SSH key write"]
+    nmap_scripts: ["redis-info", "redis-brute"]
+  8080:
+    service: "HTTP Proxy"
+    protocol: tcp
+    description: "HTTP proxy or alternative web server"
+    common_vulns: ["open proxy", "management interface exposure"]
+  8443:
+    service: "HTTPS Alt"
+    protocol: tcp
+    description: "Alternative HTTPS port"
+    common_vulns: ["management interface exposure", "weak SSL"]
+  9200:
+    service: "Elasticsearch"
+    protocol: tcp
+    description: "Elasticsearch REST API"
+    common_vulns: ["no authentication", "data exposure", "RCE (older versions)"]
+  27017:
+    service: "MongoDB"
+    protocol: tcp
+    description: "MongoDB NoSQL database"
+    common_vulns: ["no authentication", "data exposure", "NoSQL injection"]

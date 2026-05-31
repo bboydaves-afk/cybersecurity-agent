@@ -1,0 +1,147 @@
+agent:
+  name: "CyberSecurityAgent"
+  data_dir: "./data"
+  log_level: "INFO"
+  log_file: "./data/logs/hacking_agent.log"
+
+database:
+  path: "./data/hacking_agent.db"
+
+credentials:
+  encryption_key_env: "HACKING_ENCRYPTION_KEY"
+
+platforms:
+  nmap:
+    path: "nmap"
+    default_timing: "T3"
+    max_parallel_scans: 3
+  metasploit:
+    rpc_host: "127.0.0.1"
+    rpc_port: 55553
+    rpc_user: "msf"
+    rpc_password_env: "MSF_RPC_PASSWORD"
+  shodan:
+    api_key_env: "SHODAN_API_KEY"
+  virustotal:
+    api_key_env: "VIRUSTOTAL_API_KEY"
+  hibp:
+    api_key_env: "HIBP_API_KEY"
+  nvd:
+    api_key_env: "NVD_API_KEY"
+  exploitdb:
+    path: ""
+  burp:
+    api_url: ""
+    api_key_env: "BURP_API_KEY"
+
+engines:
+  recon:
+    default_ports: "1-1000"
+    timeout_seconds: 300
+    max_concurrent_scans: 5
+  webapp:
+    wordlist_dir: "./data/wordlists"
+    default_wordlist: "common.txt"
+    user_agent: "CyberSecurityAgent/1.0"
+    request_timeout: 30
+    max_crawl_depth: 3
+  password:
+    wordlist_dir: "./data/wordlists"
+    hashcat_path: ""
+    john_path: ""
+    max_crack_time: 3600
+  forensics:
+    output_dir: "./data/forensics"
+  reporting:
+    output_dir: "./data/reports"
+    template_dir: "./data/report_templates"
+    logo_path: ""
+  exploit:
+    metasploit_rpc_host: "127.0.0.1"
+    metasploit_rpc_port: 55553
+    default_lhost: "0.0.0.0"
+    default_lport: 4444
+  playbook:
+    playbook_dir: "./data/playbooks"
+    max_concurrent_executions: 3
+  ad:
+    ldap_timeout: 30
+    page_size: 1000
+  api_security:
+    user_agent: "CyberSecurityAgent/1.0"
+    request_timeout: 30
+    max_fuzz_requests: 100
+    rate_limit_test_count: 50
+  automation:
+    max_concurrent_jobs: 5
+    default_timezone: "UTC"
+  wireless:
+    default_interface: "wlan0"
+    scan_timeout: 30
+  container:
+    docker_socket: "unix:///var/run/docker.sock"
+    kubeconfig_path: ""
+  osint:
+    output_dir: "./data/osint"
+    github_token_env: "GITHUB_TOKEN"
+  secrets:
+    output_dir: "./data/secrets"
+    max_file_size_mb: 50
+    scan_extensions: [".py", ".js", ".ts", ".java", ".go", ".rb", ".php", ".yaml", ".yml", ".json", ".xml", ".ini", ".toml", ".env", ".conf", ".cfg", ".properties"]
+  email_security:
+    smtp_timeout: 10
+    dns_timeout: 5
+  notification:
+    slack_webhook_env: "SLACK_WEBHOOK_URL"
+    smtp_host: ""
+    smtp_port: 587
+    smtp_user_env: "SMTP_USER"
+    smtp_pass_env: "SMTP_PASSWORD"
+    teams_webhook_env: "TEAMS_WEBHOOK_URL"
+  social_engineering:
+    templates_dir: "./data/phishing_templates"
+    landing_pages_dir: "./data/landing_pages"
+  vuln_chain:
+    max_chain_depth: 5
+  evidence:
+    storage_dir: "./data/evidence"
+    hash_algorithm: "sha256"
+  c2:
+    metasploit_rpc_host: "127.0.0.1"
+    metasploit_rpc_port: 55553
+    sliver_config: ""
+  mobile:
+    apktool_path: ""
+    jadx_path: ""
+    output_dir: "./data/mobile"
+
+cloud:
+  aws:
+    profile: "default"
+    region: "us-east-1"
+  azure:
+    subscription_id_env: "AZURE_SUBSCRIPTION_ID"
+    tenant_id_env: "AZURE_TENANT_ID"
+  gcp:
+    project_id_env: "GCP_PROJECT_ID"
+    credentials_file_env: "GOOGLE_APPLICATION_CREDENTIALS"
+
+web:
+  host: "0.0.0.0"
+  port: 8084
+  secret_key_env: "HACKING_SECRET_KEY"
+
+ai_agent:
+  api_key_env: "ANTHROPIC_API_KEY"
+  model: "claude-sonnet-4-5-20250929"
+  max_tokens: 8192
+
+safety:
+  require_scope_validation: true
+  require_project_for_exploitation: true
+  auto_log_all_actions: true
+  blocked_targets:
+    - "127.0.0.1"
+    - "localhost"
+    - "*.gov"
+    - "*.mil"

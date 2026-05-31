@@ -1,0 +1,258 @@
+# MITRE ATT&CK Framework - Key Tactics and Techniques
+version: "14.1"
+tactics:
+  - id: TA0043
+    name: Reconnaissance
+    description: "Gathering information to plan future operations"
+    techniques:
+      - id: T1595
+        name: Active Scanning
+        description: "Scanning victim IP blocks to gather information"
+        sub_techniques: ["T1595.001 - Scanning IP Blocks", "T1595.002 - Vulnerability Scanning", "T1595.003 - Wordlist Scanning"]
+        detection: "Monitor for suspicious network traffic patterns, IDS/IPS alerts"
+      - id: T1592
+        name: Gather Victim Host Information
+        description: "Gathering information about victim hosts via active scanning or public data"
+        detection: "Difficult to detect; monitor for banner-grabbing and fingerprinting"
+      - id: T1589
+        name: Gather Victim Identity Information
+        description: "Gathering credentials, email addresses, employee names"
+        detection: "Monitor for credential stuffing attempts, OSINT tool signatures"
+      - id: T1590
+        name: Gather Victim Network Information
+        description: "Gathering network topology, DNS, IP ranges"
+        detection: "Monitor for excessive DNS queries, zone transfer attempts"
+      - id: T1591
+        name: Gather Victim Org Information
+        description: "Gathering business relationships, locations, roles"
+        detection: "Difficult to detect externally"
+
+  - id: TA0042
+    name: Resource Development
+    description: "Establishing resources for operations"
+    techniques:
+      - id: T1583
+        name: Acquire Infrastructure
+        description: "Purchasing domains, servers, VPS for operations"
+        detection: "Monitor for newly registered domains, threat intel feeds"
+      - id: T1587
+        name: Develop Capabilities
+        description: "Building malware, exploits, and tools"
+        detection: "Malware analysis, signature development"
+      - id: T1588
+        name: Obtain Capabilities
+        description: "Purchasing or downloading tools, exploits, certificates"
+        detection: "Monitor for known tool signatures"
+
+  - id: TA0001
+    name: Initial Access
+    description: "Techniques to gain initial foothold"
+    techniques:
+      - id: T1190
+        name: Exploit Public-Facing Application
+        description: "Exploiting vulnerabilities in internet-facing applications"
+        detection: "WAF logs, application error logs, IDS signatures"
+        platforms: [Linux, Windows, macOS, Network, Containers]
+      - id: T1133
+        name: External Remote Services
+        description: "Leveraging VPN, Citrix, SSH, RDP for access"
+        detection: "Authentication logs, VPN connection monitoring"
+      - id: T1566
+        name: Phishing
+        description: "Sending phishing messages with malicious attachments or links"
+        sub_techniques: ["T1566.001 - Spearphishing Attachment", "T1566.002 - Spearphishing Link", "T1566.003 - Spearphishing via Service"]
+        detection: "Email gateway logs, URL filtering, sandbox analysis"
+      - id: T1078
+        name: Valid Accounts
+        description: "Using stolen or compromised credentials"
+        detection: "Impossible travel alerts, credential monitoring, MFA logs"
+      - id: T1199
+        name: Trusted Relationship
+        description: "Abusing trusted third-party relationships"
+        detection: "Monitor third-party access, audit trust relationships"
+
+  - id: TA0002
+    name: Execution
+    description: "Techniques to run adversary-controlled code"
+    techniques:
+      - id: T1059
+        name: Command and Scripting Interpreter
+        description: "Abusing command and script interpreters to execute commands"
+        sub_techniques: ["T1059.001 - PowerShell", "T1059.003 - Windows Command Shell", "T1059.004 - Unix Shell", "T1059.006 - Python", "T1059.007 - JavaScript"]
+        detection: "Command-line logging, script block logging, EDR telemetry"
+      - id: T1203
+        name: Exploitation for Client Execution
+        description: "Exploiting software vulnerabilities in client applications"
+        detection: "Application crash logs, EDR behavioral detection"
+      - id: T1204
+        name: User Execution
+        description: "Relying on user to execute malicious file or link"
+        detection: "Process creation monitoring, file execution logging"
+
+  - id: TA0003
+    name: Persistence
+    description: "Techniques to maintain access"
+    techniques:
+      - id: T1053
+        name: Scheduled Task/Job
+        description: "Abusing task scheduling to execute programs at system startup or on schedule"
+        detection: "Task scheduler logs, cron job monitoring"
+      - id: T1136
+        name: Create Account
+        description: "Creating local or domain accounts for persistent access"
+        detection: "Account creation event logs, directory service monitoring"
+      - id: T1547
+        name: Boot or Logon Autostart Execution
+        description: "Configuring system settings to auto-run on boot/logon"
+        sub_techniques: ["T1547.001 - Registry Run Keys", "T1547.009 - Shortcut Modification"]
+        detection: "Registry monitoring, startup folder auditing"
+      - id: T1505
+        name: Server Software Component
+        description: "Abusing server software components like web shells"
+        sub_techniques: ["T1505.003 - Web Shell"]
+        detection: "File integrity monitoring, web server log analysis"
+
+  - id: TA0004
+    name: Privilege Escalation
+    description: "Techniques to gain higher-level permissions"
+    techniques:
+      - id: T1068
+        name: Exploitation for Privilege Escalation
+        description: "Exploiting software vulnerabilities to elevate privileges"
+        detection: "Vulnerability monitoring, process integrity level tracking"
+      - id: T1548
+        name: Abuse Elevation Control Mechanism
+        description: "Circumventing elevation controls like UAC or sudo"
+        sub_techniques: ["T1548.001 - Setuid and Setgid", "T1548.002 - Bypass UAC", "T1548.003 - Sudo and Sudo Caching"]
+        detection: "UAC bypass detection, sudo log monitoring"
+      - id: T1078
+        name: Valid Accounts
+        description: "Using valid accounts with higher privileges"
+        detection: "Privilege escalation alerts, abnormal admin activity"
+
+  - id: TA0005
+    name: Defense Evasion
+    description: "Techniques to avoid detection"
+    techniques:
+      - id: T1070
+        name: Indicator Removal
+        description: "Deleting or modifying artifacts to hide activity"
+        sub_techniques: ["T1070.001 - Clear Windows Event Logs", "T1070.003 - Clear Command History", "T1070.004 - File Deletion"]
+        detection: "Log gap detection, file system monitoring"
+      - id: T1027
+        name: Obfuscated Files or Information
+        description: "Encrypting, encoding, or obfuscating payloads"
+        detection: "Entropy analysis, script deobfuscation tools"
+      - id: T1562
+        name: Impair Defenses
+        description: "Disabling or modifying security tools"
+        sub_techniques: ["T1562.001 - Disable or Modify Tools", "T1562.002 - Disable Windows Event Logging"]
+        detection: "Security tool health monitoring, service status alerts"
+
+  - id: TA0006
+    name: Credential Access
+    description: "Techniques to steal credentials"
+    techniques:
+      - id: T1110
+        name: Brute Force
+        description: "Trying many passwords to gain access"
+        sub_techniques: ["T1110.001 - Password Guessing", "T1110.002 - Password Cracking", "T1110.003 - Password Spraying", "T1110.004 - Credential Stuffing"]
+        detection: "Account lockout alerts, failed login monitoring"
+      - id: T1003
+        name: OS Credential Dumping
+        description: "Dumping credentials from OS credential stores"
+        sub_techniques: ["T1003.001 - LSASS Memory", "T1003.002 - SAM", "T1003.003 - NTDS", "T1003.004 - LSA Secrets"]
+        detection: "LSASS access monitoring, process injection detection"
+      - id: T1558
+        name: Steal or Forge Kerberos Tickets
+        description: "Stealing or forging Kerberos tickets for authentication"
+        sub_techniques: ["T1558.001 - Golden Ticket", "T1558.003 - Kerberoasting"]
+        detection: "Kerberos ticket anomaly detection, SPN monitoring"
+
+  - id: TA0007
+    name: Discovery
+    description: "Techniques to explore the environment"
+    techniques:
+      - id: T1046
+        name: Network Service Discovery
+        description: "Scanning for services running on remote hosts"
+        detection: "Network scan detection, IDS alerts"
+      - id: T1082
+        name: System Information Discovery
+        description: "Gathering detailed system information"
+        detection: "Command-line monitoring for recon commands"
+      - id: T1087
+        name: Account Discovery
+        description: "Listing user and admin accounts"
+        detection: "LDAP query monitoring, AD enumeration detection"
+
+  - id: TA0008
+    name: Lateral Movement
+    description: "Techniques to move through the environment"
+    techniques:
+      - id: T1021
+        name: Remote Services
+        description: "Using remote services like RDP, SSH, SMB for lateral movement"
+        sub_techniques: ["T1021.001 - Remote Desktop Protocol", "T1021.002 - SMB/Windows Admin Shares", "T1021.004 - SSH"]
+        detection: "Lateral movement detection, remote login monitoring"
+      - id: T1570
+        name: Lateral Tool Transfer
+        description: "Transferring tools between systems"
+        detection: "File transfer monitoring, SMB share access logging"
+
+  - id: TA0009
+    name: Collection
+    description: "Techniques to gather data of interest"
+    techniques:
+      - id: T1005
+        name: Data from Local System
+        description: "Searching local system for sensitive data"
+        detection: "File access monitoring, DLP systems"
+      - id: T1039
+        name: Data from Network Shared Drive
+        description: "Searching network shares for sensitive data"
+        detection: "Share access auditing, anomalous access patterns"
+
+  - id: TA0011
+    name: "Command and Control"
+    description: "Techniques for communicating with compromised systems"
+    techniques:
+      - id: T1071
+        name: Application Layer Protocol
+        description: "Using application protocols for C2 communication"
+        sub_techniques: ["T1071.001 - Web Protocols", "T1071.004 - DNS"]
+        detection: "Network traffic analysis, DNS anomaly detection, proxy logs"
+      - id: T1105
+        name: Ingress Tool Transfer
+        description: "Transferring tools from external systems"
+        detection: "Download monitoring, proxy logs, EDR file creation events"
+
+  - id: TA0010
+    name: Exfiltration
+    description: "Techniques to steal data"
+    techniques:
+      - id: T1041
+        name: Exfiltration Over C2 Channel
+        description: "Stealing data via the existing C2 channel"
+        detection: "Outbound traffic volume analysis, DLP"
+      - id: T1048
+        name: Exfiltration Over Alternative Protocol
+        description: "Using non-standard protocols for data theft"
+        detection: "Protocol anomaly detection, DNS tunneling detection"
+
+  - id: TA0040
+    name: Impact
+    description: "Techniques to disrupt availability or integrity"
+    techniques:
+      - id: T1486
+        name: Data Encrypted for Impact
+        description: "Encrypting data to disrupt availability (ransomware)"
+        detection: "File modification monitoring, ransomware behavioral detection"
+      - id: T1489
+        name: Service Stop
+        description: "Stopping services to disrupt availability"
+        detection: "Service status monitoring, process termination alerts"
+      - id: T1490
+        name: Inhibit System Recovery
+        description: "Deleting backups or disabling recovery features"
+        detection: "Backup integrity monitoring, VSS deletion alerts"

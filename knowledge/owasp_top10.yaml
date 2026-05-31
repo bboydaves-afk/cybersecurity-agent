@@ -1,0 +1,196 @@
+# OWASP Top 10 - 2021
+version: "2021"
+categories:
+  - id: A01
+    name: "Broken Access Control"
+    severity: critical
+    description: "Access control enforces policy so users cannot act outside their intended permissions. Failures lead to unauthorized access, modification, or destruction of data."
+    cwe_ids: ["CWE-200", "CWE-201", "CWE-352", "CWE-639"]
+    test_procedures:
+      - "Test for IDOR by modifying object IDs in requests"
+      - "Verify CORS configuration is not overly permissive"
+      - "Test privilege escalation by accessing admin endpoints as regular user"
+      - "Check for missing function-level access controls"
+      - "Test for path traversal vulnerabilities"
+      - "Verify JWT/session tokens cannot be manipulated"
+      - "Check for forced browsing to unauthenticated pages"
+    tools: ["Burp Suite", "OWASP ZAP", "Postman", "curl"]
+    remediation:
+      - "Implement proper access control checks on every request"
+      - "Deny by default except for public resources"
+      - "Use RBAC or ABAC consistently"
+      - "Disable directory listing"
+      - "Log and alert on access control failures"
+
+  - id: A02
+    name: "Cryptographic Failures"
+    severity: high
+    description: "Failures related to cryptography, often leading to sensitive data exposure. Previously known as Sensitive Data Exposure."
+    cwe_ids: ["CWE-259", "CWE-327", "CWE-328", "CWE-330"]
+    test_procedures:
+      - "Check if sensitive data is transmitted in cleartext (HTTP)"
+      - "Verify TLS configuration and cipher suites"
+      - "Check for weak or deprecated cryptographic algorithms"
+      - "Verify passwords are stored using strong hashing (bcrypt, scrypt, Argon2)"
+      - "Check for hardcoded encryption keys or secrets"
+      - "Test for insufficient entropy in random values"
+    tools: ["testssl.sh", "SSLyze", "Nmap SSL scripts", "Burp Suite"]
+    remediation:
+      - "Classify and protect sensitive data according to regulations"
+      - "Use TLS 1.2+ for all data in transit"
+      - "Use strong, current algorithms (AES-256, RSA-2048+)"
+      - "Store passwords with Argon2, scrypt, or bcrypt"
+      - "Use authenticated encryption (AEAD)"
+
+  - id: A03
+    name: "Injection"
+    severity: critical
+    description: "Injection flaws occur when untrusted data is sent to an interpreter as part of a command or query."
+    cwe_ids: ["CWE-79", "CWE-89", "CWE-73"]
+    test_procedures:
+      - "Test all input fields for SQL injection (UNION, blind, error-based)"
+      - "Test for XSS (reflected, stored, DOM-based)"
+      - "Test for command injection in system calls"
+      - "Test for LDAP injection in directory queries"
+      - "Test for NoSQL injection in MongoDB/CouchDB queries"
+      - "Test for template injection (SSTI)"
+      - "Test for header injection (CRLF)"
+    tools: ["SQLMap", "Burp Suite", "OWASP ZAP", "XSStrike", "Commix"]
+    remediation:
+      - "Use parameterized queries / prepared statements"
+      - "Use ORM frameworks"
+      - "Validate and sanitize all input"
+      - "Escape output based on context (HTML, JS, URL, CSS)"
+      - "Use Content-Security-Policy header"
+
+  - id: A04
+    name: "Insecure Design"
+    severity: high
+    description: "Flaws in design and architecture that cannot be fixed by implementation alone."
+    cwe_ids: ["CWE-209", "CWE-256", "CWE-501", "CWE-522"]
+    test_procedures:
+      - "Review authentication flow for design weaknesses"
+      - "Check for missing rate limiting on sensitive operations"
+      - "Verify business logic constraints are enforced server-side"
+      - "Test for race conditions in critical operations"
+      - "Review error handling for information disclosure"
+    tools: ["Burp Suite", "Manual review", "Threat modeling tools"]
+    remediation:
+      - "Use threat modeling during design phase"
+      - "Establish secure design patterns library"
+      - "Implement defense in depth"
+      - "Limit resource consumption per user/session"
+
+  - id: A05
+    name: "Security Misconfiguration"
+    severity: high
+    description: "Missing or incorrect security configurations across the application stack."
+    cwe_ids: ["CWE-16", "CWE-611"]
+    test_procedures:
+      - "Check for default credentials on all services"
+      - "Verify unnecessary features are disabled"
+      - "Check HTTP security headers (CSP, HSTS, X-Frame-Options, etc.)"
+      - "Test for XML external entity (XXE) processing"
+      - "Check for verbose error messages in production"
+      - "Verify directory listing is disabled"
+      - "Check cloud storage permissions (S3, Azure Blob)"
+    tools: ["Nikto", "SecurityHeaders.com", "Nmap", "ScoutSuite"]
+    remediation:
+      - "Implement hardened configuration baselines"
+      - "Automate configuration verification"
+      - "Remove unused features, frameworks, and components"
+      - "Review and update configurations regularly"
+
+  - id: A06
+    name: "Vulnerable and Outdated Components"
+    severity: high
+    description: "Using components with known vulnerabilities or that are no longer supported."
+    cwe_ids: ["CWE-1104"]
+    test_procedures:
+      - "Inventory all components and their versions"
+      - "Check components against CVE databases"
+      - "Verify components are still supported/maintained"
+      - "Check for outdated JavaScript libraries"
+      - "Test for known exploits against detected versions"
+    tools: ["OWASP Dependency-Check", "Snyk", "npm audit", "retire.js", "Trivy"]
+    remediation:
+      - "Maintain component inventory with versions"
+      - "Subscribe to security advisories"
+      - "Patch or upgrade promptly"
+      - "Remove unused dependencies"
+
+  - id: A07
+    name: "Identification and Authentication Failures"
+    severity: critical
+    description: "Weaknesses in authentication and session management."
+    cwe_ids: ["CWE-287", "CWE-297", "CWE-384"]
+    test_procedures:
+      - "Test for credential stuffing and brute force"
+      - "Check for default or weak passwords"
+      - "Verify MFA implementation"
+      - "Test session management (fixation, hijacking, timeout)"
+      - "Check password recovery flow for weaknesses"
+      - "Verify account lockout policies"
+    tools: ["Burp Suite", "Hydra", "John the Ripper", "Custom scripts"]
+    remediation:
+      - "Implement MFA"
+      - "Use strong password policies"
+      - "Implement account lockout with increasing delays"
+      - "Use secure session management"
+      - "Rotate session IDs after login"
+
+  - id: A08
+    name: "Software and Data Integrity Failures"
+    severity: high
+    description: "Failures related to code and infrastructure that does not protect against integrity violations."
+    cwe_ids: ["CWE-502", "CWE-829"]
+    test_procedures:
+      - "Check for insecure deserialization"
+      - "Verify CI/CD pipeline integrity"
+      - "Check for unsigned software updates"
+      - "Test for prototype pollution (JavaScript)"
+      - "Verify dependency integrity (lock files, checksums)"
+    tools: ["Burp Suite", "ysoserial", "npm audit"]
+    remediation:
+      - "Use digital signatures for software and data"
+      - "Verify integrity of dependencies"
+      - "Secure CI/CD pipelines"
+      - "Avoid insecure deserialization"
+
+  - id: A09
+    name: "Security Logging and Monitoring Failures"
+    severity: medium
+    description: "Insufficient logging, monitoring, and alerting to detect attacks."
+    cwe_ids: ["CWE-117", "CWE-223", "CWE-532", "CWE-778"]
+    test_procedures:
+      - "Verify login attempts are logged"
+      - "Check for log injection vulnerabilities"
+      - "Verify alerts trigger on suspicious activity"
+      - "Check log retention and protection"
+      - "Test if security events generate alerts"
+    tools: ["Manual review", "Log analysis tools", "SIEM"]
+    remediation:
+      - "Log all authentication events"
+      - "Ensure logs have sufficient context"
+      - "Implement centralized log management"
+      - "Establish alerting for suspicious patterns"
+      - "Conduct regular log reviews"
+
+  - id: A10
+    name: "Server-Side Request Forgery (SSRF)"
+    severity: high
+    description: "SSRF occurs when a web application fetches a remote resource without validating the user-supplied URL."
+    cwe_ids: ["CWE-918"]
+    test_procedures:
+      - "Test URL parameters for SSRF (internal IP ranges, cloud metadata)"
+      - "Test for SSRF via file upload (SVG, XML)"
+      - "Check for blind SSRF via DNS/HTTP callbacks"
+      - "Test cloud metadata endpoint access (169.254.169.254)"
+      - "Test for SSRF filter bypass techniques"
+    tools: ["Burp Suite", "Collaborator", "SSRFmap"]
+    remediation:
+      - "Validate and sanitize all user-supplied URLs"
+      - "Use allowlists for permitted domains/IPs"
+      - "Block requests to private IP ranges"
+      - "Disable unnecessary URL schemes"
+      - "Use network-level segmentation"

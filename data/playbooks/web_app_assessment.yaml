@@ -1,0 +1,115 @@
+# Web Application Security Assessment Playbook
+name: Web Application Assessment
+description: OWASP-focused web application security assessment
+version: "1.0"
+author: CyberSecurity Agent
+trigger: manual
+
+phases:
+  - name: Discovery
+    description: Map the web application attack surface
+    steps:
+      - action: crawl_site
+        description: Spider the web application
+        params:
+          url: "{{ url }}"
+          max_depth: 3
+      - action: check_technologies
+        description: Identify web technologies
+        params:
+          url: "{{ url }}"
+      - action: directory_fuzz
+        description: Discover hidden directories and files
+        params:
+          url: "{{ url }}"
+          wordlist: common
+
+  - name: Configuration Review
+    description: Check server and application configuration
+    steps:
+      - action: analyze_headers
+        description: Analyze HTTP security headers
+        params:
+          url: "{{ url }}"
+      - action: test_ssl
+        description: Test SSL/TLS configuration
+        params:
+          hostname: "{{ hostname }}"
+          port: "{{ port | default(443) }}"
+      - action: test_cors
+        description: Test CORS policy
+        params:
+          url: "{{ url }}"
+      - action: check_csp
+        description: Analyze Content Security Policy
+        params:
+          url: "{{ url }}"
+      - action: audit_cookies
+        description: Review cookie security attributes
+        params:
+          url: "{{ url }}"
+
+  - name: Injection Testing
+    description: Test for injection vulnerabilities (OWASP A03)
+    steps:
+      - action: test_sqli
+        description: SQL injection testing
+        params:
+          url: "{{ url }}"
+        requires_confirmation: true
+      - action: test_xss
+        description: Cross-site scripting testing
+        params:
+          url: "{{ url }}"
+        requires_confirmation: true
+      - action: test_xxe
+        description: XML External Entity testing
+        params:
+          url: "{{ url }}"
+        requires_confirmation: true
+      - action: test_ssrf
+        description: Server-side request forgery testing
+        params:
+          url: "{{ url }}"
+        requires_confirmation: true
+
+  - name: Authentication Testing
+    description: Test authentication mechanisms (OWASP A07)
+    steps:
+      - action: test_authentication
+        description: Test auth bypass and weaknesses
+        params:
+          url: "{{ url }}"
+      - action: test_rate_limiting
+        description: Test rate limiting on login
+        params:
+          url: "{{ login_url | default(url + '/login') }}"
+      - action: check_default_creds
+        description: Check for default credentials
+        params:
+          target: "{{ url }}"
+
+  - name: Access Control Testing
+    description: Test authorization (OWASP A01)
+    steps:
+      - action: test_idor
+        description: Test insecure direct object references
+        params:
+          url: "{{ url }}"
+        requires_confirmation: true
+      - action: test_open_redirect
+        description: Test for open redirect vulnerabilities
+        params:
+          url: "{{ url }}"
+
+  - name: Reporting
+    description: Generate assessment report
+    steps:
+      - action: calculate_risk_score
+        params:
+          project_id: "{{ project_id }}"
+      - action: generate_report
+        params:
+          project_id: "{{ project_id }}"
+          format: html
+          title: "Web Application Security Assessment — {{ url }}"
